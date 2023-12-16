@@ -1,4 +1,4 @@
-from classes import Database
+from classes import Database, Guesswords
 import pytest
 
 
@@ -15,3 +15,18 @@ def test_create_database_incorrect_path():
     with pytest.raises(FileNotFoundError) as excinfo:
         Database('nonexistent_file.txt')
     assert str(excinfo.value) == 'File nonexistent_file.txt not found'
+
+
+# test class Guesswords
+
+def test_create_guesswords():
+    guesswords = Guesswords()
+    assert guesswords.length == 2315
+
+
+def test_generate_guessword(monkeypatch):
+    def return_zero(f, t):
+        return 0
+    monkeypatch.setattr('classes.randint', return_zero)
+    guesswords = Guesswords()
+    assert guesswords.generate_guessword() == 'cigar'

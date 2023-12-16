@@ -1,3 +1,6 @@
+from random import randint
+
+
 class Database:
     '''
     class Database. Contains attributes:
@@ -31,3 +34,19 @@ class Database:
     @property
     def length(self) -> int:
         return self._length
+
+
+class Guesswords(Database):
+    '''
+    class Guesswords inherits from class Database.
+    Contains the same attributes as Database
+    '''
+    def __init__(self) -> None:
+        super().__init__('guesswords.txt')
+
+    def generate_guessword(self) -> str:
+        '''
+        Generates random guessword
+        '''
+        guessword_index = randint(0, super().length - 1)
+        return super().wordlist[guessword_index]

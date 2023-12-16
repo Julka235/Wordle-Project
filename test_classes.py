@@ -1,5 +1,4 @@
 from classes import Database
-from classes import IncorrectPath
 import pytest
 
 
@@ -13,6 +12,6 @@ def test_create_database():
 
 
 def test_create_database_incorrect_path():
-    with pytest.raises(IncorrectPath) as excinfo:
+    with pytest.raises(FileNotFoundError) as excinfo:
         Database('nonexistent_file.txt')
-    assert str(excinfo.value) == 'File not found in path nonexistent_file.txt'
+    assert str(excinfo.value) == 'File nonexistent_file.txt not found'

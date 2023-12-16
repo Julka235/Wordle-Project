@@ -1,8 +1,3 @@
-class IncorrectPath(Exception):
-    def __init__(self, path: str) -> None:
-        super().__init__(f'File not found in path {path}')
-
-
 class Database:
     '''
     class Database. Contains attributes:
@@ -23,11 +18,11 @@ class Database:
             with open(path, 'r') as file_handle:
                 for line in file_handle:
                     line = line.rstrip()
-                    if len(line) == 5:
-                        self._wordlist.append(line)
+                    if len(line) == 5 and line.isalpha():
+                        self._wordlist.append(line.lower())
             self._length = len(self._wordlist)
         except FileNotFoundError:
-            raise IncorrectPath(path)
+            raise FileNotFoundError(f'File {path} not found')
 
     @property
     def wordlist(self) -> list:

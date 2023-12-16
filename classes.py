@@ -109,15 +109,20 @@ class Solution:
         'green' if letter is in the same place in <guessword>
         'yellow' if letter is not in the same place in <guessword>
         'gray' if letter is not in <guessword>
-        returns False if word is invalid
+        returns False if <word> is invalid
+        returns True if <word> is equal to <guessword>
         '''
-        if ValidWords().is_valid(word) is False:
+        if not ValidWords().is_valid(word):
             return False
+
+        if word == self._guessword:
+            return True
+
         clues = []
         guessword = self._guessword
         for index in range(0, 5):
             letter = word[index]
-            if letter == guessword[index]:
+            if letter == guessword[index] and letter not in word[0:index]:
                 clues.append('green')
             elif letter in guessword and letter not in word[0:index]:
                 clues.append('yellow')

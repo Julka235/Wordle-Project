@@ -153,3 +153,28 @@ def test_get_clues_invalid_word(monkeypatch):
     solution = Solution()
     word = 'abcde'
     assert solution.get_clues(word) is False
+
+
+def test_get_clues_guessed_guessword(monkeypatch):
+    def return_zero(f, t):  # 'aback'
+        return 0
+    monkeypatch.setattr('classes.randint', return_zero)
+    solution = Solution()
+    word = 'aback'
+    assert solution.get_clues(word) is True
+
+
+def test_get_clues_same_letter_second_in_guessword(monkeypatch):
+    def return_num(f, t):  # 'evade'
+        return 679
+    monkeypatch.setattr('classes.randint', return_num)
+    solution = Solution()
+    word = 'aback'
+    clues = [
+        'yellow',
+        'gray',
+        'gray',
+        'gray',
+        'gray'
+    ]
+    assert solution.get_clues(word) == clues

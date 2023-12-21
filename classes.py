@@ -1,4 +1,4 @@
-from random import randint
+from random import choice
 
 
 class Database:
@@ -22,7 +22,7 @@ class Database:
                 for line in file_handle:
                     line = line.rstrip()
                     if len(line) == 5 and line.isalpha():
-                        self._wordlist.append(line.lower())
+                        self._wordlist.append(line.upper())
             self._wordlist.sort()
             self._length = len(self._wordlist)
         except FileNotFoundError:
@@ -49,8 +49,7 @@ class Guesswords(Database):
         '''
         Generates and returns random guessword
         '''
-        guessword_index = randint(0, super().length - 1)
-        return super().wordlist[guessword_index]
+        return choice(super().wordlist)
 
 
 class ValidWords(Database):
@@ -66,6 +65,7 @@ class ValidWords(Database):
         uses binary search algorithm to verify whether
         <word> is in ValidWords' <wordlist>
         '''
+        word = word.upper()
         begin = 0
         end = super().length - 1
         while begin < end:
@@ -108,10 +108,14 @@ class Solution:
         returns five-element list with clues for <word> compared to <guessword>
         'green' if letter is in the same place in <guessword>
         'yellow' if letter is not in the same place in <guessword>
-        'gray' if letter is not in <guessword>
+        'gray' if letter is not in <guessword> or was earlier flagged
+        as green or yellow
+
         returns False if <word> is invalid
         returns True if <word> is equal to <guessword>
         '''
+        word = word.upper()
+
         if not ValidWords().is_valid(word):
             return False
 

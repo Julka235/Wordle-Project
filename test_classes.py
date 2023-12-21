@@ -16,7 +16,7 @@ def test_create_database():
     checks if wordlist is sorted
     '''
     database = Database('txt_files/database_to_test.txt')
-    wordlist = ['brand', 'crime', 'pouty']
+    wordlist = ['BRAND', 'CRIME', 'POUTY']
     assert database.length == 3
     assert database.wordlist == wordlist
 
@@ -34,10 +34,10 @@ def test_create_guesswords():
 
 
 def test_generate_guessword(monkeypatch):
-    def return_zero(f, t):
-        return 0
-    monkeypatch.setattr('classes.randint', return_zero)
-    assert Guesswords().generate_guessword() == 'aback'
+    def return_aback(f):
+        return 'ABACK'
+    monkeypatch.setattr('classes.choice', return_aback)
+    assert Guesswords().generate_guessword() == 'ABACK'
 
 
 # test class ValidWords
@@ -107,19 +107,19 @@ def test_is_valid_len_six():
 # test class Solution
 
 def test_create_solution(monkeypatch):
-    def return_zero(f, t):
-        return 0
-    monkeypatch.setattr('classes.randint', return_zero)
+    def return_aback(f):
+        return 'ABACK'
+    monkeypatch.setattr('classes.choice', return_aback)
     solution = Solution()
-    assert solution.guessword == 'aback'
+    assert solution.guessword == 'ABACK'
 
 
 def test_get_clues(monkeypatch):
-    def return_zero(f, t):  # 'aback'
-        return 0
-    monkeypatch.setattr('classes.randint', return_zero)
+    def return_aback(f):
+        return 'ABACK'
+    monkeypatch.setattr('classes.choice', return_aback)
     solution = Solution()
-    word = 'accoy'
+    word = 'ACCOY'
     clues = [
         'green',
         'yellow',
@@ -131,9 +131,9 @@ def test_get_clues(monkeypatch):
 
 
 def test_get_clues_two_same_letters_in_word(monkeypatch):
-    def return_zero(f, t):  # 'aback'
-        return 0
-    monkeypatch.setattr('classes.randint', return_zero)
+    def return_aback(f):
+        return 'ABACK'
+    monkeypatch.setattr('classes.choice', return_aback)
     solution = Solution()
     word = 'aalii'
     clues = [
@@ -147,27 +147,27 @@ def test_get_clues_two_same_letters_in_word(monkeypatch):
 
 
 def test_get_clues_invalid_word(monkeypatch):
-    def return_zero(f, t):  # 'aback'
-        return 0
-    monkeypatch.setattr('classes.randint', return_zero)
+    def return_aback(f):
+        return 'ABACK'
+    monkeypatch.setattr('classes.choice', return_aback)
     solution = Solution()
     word = 'abcde'
     assert solution.get_clues(word) is False
 
 
 def test_get_clues_guessed_guessword(monkeypatch):
-    def return_zero(f, t):  # 'aback'
-        return 0
-    monkeypatch.setattr('classes.randint', return_zero)
+    def return_aback(f):
+        return 'ABACK'
+    monkeypatch.setattr('classes.choice', return_aback)
     solution = Solution()
     word = 'aback'
     assert solution.get_clues(word) is True
 
 
 def test_get_clues_same_letter_second_in_guessword(monkeypatch):
-    def return_num(f, t):  # 'evade'
-        return 679
-    monkeypatch.setattr('classes.randint', return_num)
+    def return_evade(f):
+        return 'EVADE'
+    monkeypatch.setattr('classes.choice', return_evade)
     solution = Solution()
     word = 'aback'
     clues = [

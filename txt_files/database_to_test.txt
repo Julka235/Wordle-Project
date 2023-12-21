@@ -1,5 +1,5 @@
-POUTY
-brand
-crime
+pouty
+BRAND
+CRIME
 camera
 12345

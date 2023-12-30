@@ -4,14 +4,15 @@ from classes import ValidWords, Solution
 # constants
 WIDTH = 500
 HEIGHT = 600
-BOX_SIZE = 72
+BOX_SIZE = 53
 
-MARGIN = 50  # window margin
-BOX_MARGIN = 10  # margin between boxes
+TOP_MARGIN = 50
+MARGIN = 100  # window margin
+BOX_MARGIN = 8  # margin between boxes
 
 WHITE = (255, 255, 255)
 GRAY = (133, 146, 158)
-BLACK = (0, 0, 0)
+DARK = (52, 73, 94)
 GREEN = (12, 191, 29)
 YELLOW = (255, 191, 0)
 
@@ -42,7 +43,7 @@ def main():
     while showing:
         screen.fill(WHITE)
 
-        y = MARGIN
+        y = TOP_MARGIN
         for i in range(TRIES):
             x = MARGIN
             if i < len(guessed_words):
@@ -51,7 +52,7 @@ def main():
             for j in range(WORD_LEN):
                 # display boxes
                 box = pygame.Rect(x, y, BOX_SIZE, BOX_SIZE)
-                pygame.draw.rect(screen, BLACK, box, width=2, border_radius=3)
+                pygame.draw.rect(screen, DARK, box, width=2, border_radius=3)
                 center_value = (x + BOX_SIZE//2, y + BOX_SIZE//2)
 
                 # display <guessed_words> and <input>
@@ -62,7 +63,7 @@ def main():
                     surface = letter.get_rect(center=center_value)
                     screen.blit(letter, surface)
                 elif i == len(guessed_words) and j < len(input):
-                    letter = FONT.render(input[j], False, BLACK)
+                    letter = FONT.render(input[j], False, DARK)
                     surface = letter.get_rect(center=center_value)
                     screen.blit(letter, surface)
 
@@ -72,7 +73,7 @@ def main():
         if len(guessed_words) == TRIES and guessed_words[TRIES-1] != guessword:
             game_status = True
             center_value = (250, 550)
-            letter = SOLUTION_FONT.render(guessword, False, BLACK)
+            letter = SOLUTION_FONT.render(guessword, False, DARK)
             surface = letter.get_rect(center=center_value)
             screen.blit(letter, surface)
 

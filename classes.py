@@ -13,7 +13,7 @@ class Database:
     '''
     def __init__(self, path: str) -> None:
         '''
-        initialises class, writes words to <self._wordlist> from file <path>
+        initializes class, writes words to <self._wordlist> from file <path>
         and calculates length
         '''
         try:
@@ -95,7 +95,7 @@ class Solution:
     '''
     def __init__(self) -> None:
         '''
-        initialises class and chooses password for the game
+        initializes class and chooses password for the game
         '''
         self._guessword = Guesswords().generate_guessword()
 
@@ -103,33 +103,71 @@ class Solution:
     def guessword(self) -> str:
         return self._guessword
 
-    def get_clues(self, word: str) -> list or bool:
+    def get_colors(self, word: str) -> list or bool:
         '''
-        returns five-element list with clues for <word> compared to <guessword>
-        'green' if letter is in the same place in <guessword>
-        'yellow' if letter is not in the same place in <guessword>
-        'gray' if letter is not in <guessword> or was earlier flagged
+        returns five-element list with colors for <word>
+        GREEN if letter is in the same place in <guessword>
+        YELLOW if letter is not in the same place in <guessword>
+        GRAY if letter is not in <guessword> or was earlier flagged
         as green or yellow
 
+        case where two same letters appear in <word> or/and <guessword>
+        is treated the same way as in classic Wordle
+
         returns False if <word> is invalid
-        returns True if <word> is equal to <guessword>
         '''
         word = word.upper()
 
         if not ValidWords().is_valid(word):
             return False
 
-        if word == self._guessword:
-            return True
-
-        clues = []
+        GREEN = (12, 191, 29)
+        YELLOW = (255, 191, 0)
+        GRAY = (133, 146, 158)
         guessword = self._guessword
-        for index in range(0, 5):
-            letter = word[index]
-            if letter == guessword[index] and letter not in word[0:index]:
-                clues.append('green')
-            elif letter in guessword and letter not in word[0:index]:
-                clues.append('yellow')
-            else:
-                clues.append('gray')
-        return clues
+
+        resolution_type = True
+        for letter in word:
+            if word.count(letter) == 2 and guessword.count(letter) == 1:
+                resolution_type = False
+
+        colors = []
+
+        if resolution_type:
+            for i in range(5):
+                letter = word[i]
+                if letter == guessword[i] and letter not in word[:i]:
+                    colors.append(GREEN)
+                elif letter == guessword[i] and guessword.count(letter) == 2:
+                    colors.append(GREEN)
+                elif letter in guessword and letter not in word[:i]:
+                    colors.append(YELLOW)
+                elif letter in guessword and guessword.count(letter) == 2:
+                    colors.append(YELLOW)
+                else:
+                    colors.append(GRAY)
+        else:
+            colors = [GRAY, GRAY, GRAY, GRAY, GRAY]
+            used_letters = []
+
+            for i in range(5):
+                letter = word[i]
+                con = word.count(letter) == 2 and guessword.count(letter) == 1
+                if letter == guessword[i]:
+                    colors[i] = GREEN
+                    if con:
+                        used_letters.append(letter)
+
+            for i in range(5):
+                letter = word[i]
+                if colors[i] == GREEN:
+                    pass
+                elif letter in used_letters:
+                    pass
+                elif letter == guessword[i] and guessword.count(letter) == 2:
+                    colors[i] = GREEN
+                elif letter in guessword and letter not in word[:i]:
+                    colors[i] = YELLOW
+                elif letter in guessword and guessword.count(letter) == 2:
+                    colors[i] = YELLOW
+        return colors

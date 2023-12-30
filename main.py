@@ -78,7 +78,10 @@ def main():
                     if ValidWords().is_valid(input):
                         guessed_words.append(input)
                         input = ''
-
+                # handling backspace
+                elif event.key == pygame.K_BACKSPACE:
+                    if len(input) > 0:
+                        input = input[:-1]
                 # get input
                 elif len(input) < WORD_LEN:
                     letter = str(event.unicode.upper())

@@ -19,15 +19,24 @@ YELLOW = (255, 191, 0)
 TRIES = 6
 WORD_LEN = 5
 
+# Initialize pygame and create <screen>
+pygame.init()
+pygame.display.set_caption('Wordle')
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+FONT = pygame.font.SysFont('free sans bold', BOX_SIZE)
+SOLUTION_FONT = pygame.font.SysFont('free sans bold', 35)
+
+
+def display_text(character, color, center_value, font):
+    if font == 'normal':
+        letter = FONT.render(character, False, color)
+    else:
+        letter = SOLUTION_FONT.render(character, False, color)
+    surface = letter.get_rect(center=center_value)
+    screen.blit(letter, surface)
+
 
 def main():
-    # Initialize pygame and create <screen>
-    pygame.init()
-    pygame.display.set_caption('Wordle')
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    FONT = pygame.font.SysFont('free sans bold', BOX_SIZE)
-    SOLUTION_FONT = pygame.font.SysFont('free sans bold', 35)
-
     # variables
     input = ''
     guessed_words = []
@@ -59,13 +68,9 @@ def main():
                 if i < len(guessed_words):
                     color = colors[j]
                     pygame.draw.rect(screen, color, box, border_radius=3)
-                    letter = FONT.render(word[j], False, WHITE)
-                    surface = letter.get_rect(center=center_value)
-                    screen.blit(letter, surface)
+                    display_text(word[j], WHITE, center_value, 'normal')
                 elif i == len(guessed_words) and j < len(input):
-                    letter = FONT.render(input[j], False, DARK)
-                    surface = letter.get_rect(center=center_value)
-                    screen.blit(letter, surface)
+                    display_text(input[j], DARK, center_value, 'normal')
 
                 x += BOX_SIZE + BOX_MARGIN
             y += BOX_SIZE + BOX_MARGIN
@@ -73,9 +78,7 @@ def main():
         if len(guessed_words) == TRIES and guessed_words[TRIES-1] != guessword:
             game_status = True
             center_value = (250, 550)
-            letter = SOLUTION_FONT.render(guessword, False, DARK)
-            surface = letter.get_rect(center=center_value)
-            screen.blit(letter, surface)
+            display_text(guessword, DARK, center_value, 'solution')
 
         for event in pygame.event.get():
             # close the window

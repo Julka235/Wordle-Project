@@ -25,6 +25,7 @@ def main():
     pygame.display.set_caption('Wordle')
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     FONT = pygame.font.SysFont('free sans bold', BOX_SIZE)
+    SOLUTION_FONT = pygame.font.SysFont('free sans bold', 35)
 
     # variables
     input = ''
@@ -67,6 +68,13 @@ def main():
 
                 x += BOX_SIZE + BOX_MARGIN
             y += BOX_SIZE + BOX_MARGIN
+
+        if len(guessed_words) == TRIES and guessed_words[TRIES-1] != guessword:
+            game_status = True
+            center_value = (250, 550)
+            letter = SOLUTION_FONT.render(guessword, False, BLACK)
+            surface = letter.get_rect(center=center_value)
+            screen.blit(letter, surface)
 
         for event in pygame.event.get():
             # close the window

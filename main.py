@@ -40,12 +40,16 @@ def main():
                 # display boxes
                 box = pygame.Rect(x, y, BOX_SIZE, BOX_SIZE)
                 pygame.draw.rect(screen, BLACK, box, width=2, border_radius=3)
+                center_value = (x + BOX_SIZE//2, y + BOX_SIZE//2)
 
-                # display guesses
+                # display <guessed_words> and <input>
                 if i < len(guessed_words):
                     pygame.draw.rect(screen, GRAY, box, border_radius=3)
-                    center_value = (x + BOX_SIZE//2, y + BOX_SIZE//2)
                     letter = FONT.render(guessed_words[i][j], False, WHITE)
+                    surface = letter.get_rect(center=center_value)
+                    screen.blit(letter, surface)
+                elif i == len(guessed_words) and j < len(input):
+                    letter = FONT.render(input[j], False, BLACK)
                     surface = letter.get_rect(center=center_value)
                     screen.blit(letter, surface)
 
@@ -60,7 +64,6 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 # press enter to enter guess
                 if event.key == pygame.K_RETURN:
-                    print('yay')
                     if ValidWords().is_valid(input):
                         guessed_words.append(input)
                         input = ''
@@ -70,9 +73,7 @@ def main():
                     letter = str(event.unicode.upper())
                     if letter.isalpha():
                         input += event.unicode.upper()
-                    print(input)
 
-        # update the screen
         pygame.display.flip()
 
 

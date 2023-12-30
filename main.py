@@ -29,6 +29,7 @@ def main():
     # variables
     input = ''
     guessed_words = []
+    game_status = False
 
     # solution
     solution = Solution()
@@ -77,13 +78,15 @@ def main():
                 if event.key == pygame.K_RETURN:
                     if ValidWords().is_valid(input):
                         guessed_words.append(input)
+                        if input == guessword:
+                            game_status = True
                         input = ''
                 # handling backspace
                 elif event.key == pygame.K_BACKSPACE:
                     if len(input) > 0:
                         input = input[:-1]
                 # get input
-                elif len(input) < WORD_LEN:
+                elif len(input) < WORD_LEN and not game_status:
                     letter = str(event.unicode.upper())
                     if letter.isalpha():
                         input += event.unicode.upper()

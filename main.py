@@ -1,5 +1,5 @@
 import pygame
-from classes import ValidWords, Solution
+from classes import ValidWords
 
 # constants
 WIDTH = 500
@@ -12,8 +12,6 @@ BOX_MARGIN = 10  # margin between boxes
 WHITE = (255, 255, 255)
 GRAY = (133, 146, 158)
 BLACK = (0, 0, 0)
-GREEN = (12, 191, 29)
-YELLOW = (255, 191, 0)
 
 TRIES = 6
 WORD_LEN = 5
@@ -30,11 +28,6 @@ def main():
     input = ''
     guessed_words = []
 
-    # solution
-    solution = Solution()
-    guessword = solution.guessword
-    print(guessword)
-
     # loop
     showing = True
     while showing:
@@ -43,9 +36,6 @@ def main():
         y = MARGIN
         for i in range(TRIES):
             x = MARGIN
-            if i < len(guessed_words):
-                word = guessed_words[i]
-                colors = solution.get_colors(word)
             for j in range(WORD_LEN):
                 # display boxes
                 box = pygame.Rect(x, y, BOX_SIZE, BOX_SIZE)
@@ -54,9 +44,8 @@ def main():
 
                 # display <guessed_words> and <input>
                 if i < len(guessed_words):
-                    color = colors[j]
-                    pygame.draw.rect(screen, color, box, border_radius=3)
-                    letter = FONT.render(word[j], False, WHITE)
+                    pygame.draw.rect(screen, GRAY, box, border_radius=3)
+                    letter = FONT.render(guessed_words[i][j], False, WHITE)
                     surface = letter.get_rect(center=center_value)
                     screen.blit(letter, surface)
                 elif i == len(guessed_words) and j < len(input):
@@ -80,7 +69,7 @@ def main():
                         input = ''
 
                 # get input
-                elif len(input) < WORD_LEN:
+                elif len(input) < 5:
                     letter = str(event.unicode.upper())
                     if letter.isalpha():
                         input += event.unicode.upper()

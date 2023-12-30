@@ -34,7 +34,9 @@ def test_create_guesswords():
 
 
 def test_generate_guessword(monkeypatch):
-    monkeypatch.setattr('classes.choice', lambda f: 'ABACK')
+    def return_aback(f):
+        return 'ABACK'
+    monkeypatch.setattr('classes.choice', return_aback)
     assert Guesswords().generate_guessword() == 'ABACK'
 
 
@@ -105,90 +107,74 @@ def test_is_valid_len_six():
 # test class Solution
 
 def test_create_solution(monkeypatch):
-    monkeypatch.setattr('classes.choice', lambda f: 'ABACK')
+    def return_aback(f):
+        return 'ABACK'
+    monkeypatch.setattr('classes.choice', return_aback)
     solution = Solution()
     assert solution.guessword == 'ABACK'
 
 
-GREEN = (12, 191, 29)
-YELLOW = (255, 191, 0)
-GRAY = (133, 146, 158)
-
-
-def test_get_colors_simple(monkeypatch):
-    monkeypatch.setattr('classes.choice', lambda f: 'BLUSH')
-    solution = Solution()
-    word = 'BILLS'
-    colors = [
-        GREEN,
-        GRAY,
-        YELLOW,
-        GRAY,
-        YELLOW
-    ]
-    assert solution.get_colors(word) == colors
-
-
-def test_get_colors_two_letters_in_guessword_one_in_word(monkeypatch):
-    monkeypatch.setattr('classes.choice', lambda f: 'ABACK')
+def test_get_clues(monkeypatch):
+    def return_aback(f):
+        return 'ABACK'
+    monkeypatch.setattr('classes.choice', return_aback)
     solution = Solution()
     word = 'ACCOY'
-    colors = [
-        GREEN,
-        YELLOW,
-        GRAY,
-        GRAY,
-        GRAY
+    clues = [
+        'green',
+        'yellow',
+        'gray',
+        'gray',
+        'gray'
     ]
-    assert solution.get_colors(word) == colors
+    assert solution.get_clues(word) == clues
 
 
-def test_get_colors_two_letters_in_word_and_guessword(monkeypatch):
-    monkeypatch.setattr('classes.choice', lambda f: 'ABACK')
+def test_get_clues_two_same_letters_in_word(monkeypatch):
+    def return_aback(f):
+        return 'ABACK'
+    monkeypatch.setattr('classes.choice', return_aback)
     solution = Solution()
     word = 'aalii'
-    colors = [
-        GREEN,
-        YELLOW,
-        GRAY,
-        GRAY,
-        GRAY
+    clues = [
+        'green',
+        'gray',
+        'gray',
+        'gray',
+        'gray'
     ]
-    assert solution.get_colors(word) == colors
+    assert solution.get_clues(word) == clues
 
 
-def test_get_colors_invalid_word(monkeypatch):
-    monkeypatch.setattr('classes.choice', lambda f: 'ABACK')
+def test_get_clues_invalid_word(monkeypatch):
+    def return_aback(f):
+        return 'ABACK'
+    monkeypatch.setattr('classes.choice', return_aback)
     solution = Solution()
     word = 'abcde'
-    assert solution.get_colors(word) is False
+    assert solution.get_clues(word) is False
 
 
 def test_get_clues_guessed_guessword(monkeypatch):
-    monkeypatch.setattr('classes.choice', lambda f: 'ABACK')
+    def return_aback(f):
+        return 'ABACK'
+    monkeypatch.setattr('classes.choice', return_aback)
     solution = Solution()
     word = 'aback'
-    colors = [
-        GREEN,
-        GREEN,
-        GREEN,
-        GREEN,
-        GREEN
-    ]
-    assert solution.get_colors(word) == colors
+    assert solution.get_clues(word) is True
 
 
-def test_get_colors_two_letters_in_word_one_in_guessword(monkeypatch):
-    monkeypatch.setattr('classes.choice', lambda f: 'EVADE')
+def test_get_clues_same_letter_second_in_guessword(monkeypatch):
+    def return_evade(f):
+        return 'EVADE'
+    monkeypatch.setattr('classes.choice', return_evade)
     solution = Solution()
     word = 'aback'
-    colors = [
-        GRAY,
-        GRAY,
-        GREEN,
-        GRAY,
-        GRAY
+    clues = [
+        'yellow',
+        'gray',
+        'gray',
+        'gray',
+        'gray'
     ]
-    assert solution.get_colors(word) == colors
-
-# git push origin
+    assert solution.get_clues(word) == clues

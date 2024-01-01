@@ -24,6 +24,7 @@ TRIES = 6
 WORD_LEN = 5
 
 FIRST_LETTERS = 'QWERTYUIOP'
+SECOND_LETTERS = 'ASDFGHJKL'
 
 # Initialize pygame and create <screen>
 pygame.init()
@@ -115,6 +116,19 @@ def main():
         for button in FIRST_ROW:
             button.display()
 
+        # keyboard's second row
+        SECOND_ROW = []
+        y += KEY_SIZE + KEY_MARGIN
+        x = WINDOW_KEY_MARGIN + KEY_SIZE // 2
+        for letter in SECOND_LETTERS:
+            button = Button((x, y), (KEY_SIZE, KEY_SIZE), letter)
+            SECOND_ROW.append(button)
+            x += KEY_SIZE + KEY_MARGIN
+        for button in SECOND_ROW:
+            button.display()
+
+        # keyboard's last row
+
         # display answer if failed to guess
         if len(guessed_words) == TRIES and guessed_words[TRIES-1] != guessword:
             game_status = True
@@ -127,6 +141,10 @@ def main():
                 showing = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 for button in FIRST_ROW:
+                    if button.area.collidepoint(event.pos):
+                        if len(input) < WORD_LEN:
+                            input += button.letter
+                for button in SECOND_ROW:
                     if button.area.collidepoint(event.pos):
                         if len(input) < WORD_LEN:
                             input += button.letter

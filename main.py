@@ -5,12 +5,12 @@ from classes import ValidWords, Solution
 WIDTH = 500
 HEIGHT = 700
 BOX_SIZE = 53
-KEY_SIZE = 36
+KEY_SIZE = 40
 
 TOP_MARGIN = 50
 MARGIN = 100  # window margin
 BOX_MARGIN = 8  # margin between boxes
-KEY_MARGIN = 6
+KEY_MARGIN = 3
 WINDOW_KEY_MARGIN = 40
 
 
@@ -52,7 +52,7 @@ class Button:
         center_value = (x + width // 2, y + height // 2)
         self.sign = KEY_FONT.render(sign, False, WHITE)
         self.surface = self.sign.get_rect(center=center_value)
-        self.area = pygame.Rect(x, y, 40, 40)
+        self.area = pygame.Rect(x, y, width, height)
         self.width = width
         self.height = height
         self.letter = sign
@@ -141,6 +141,8 @@ def main():
             x += KEY_SIZE + KEY_MARGIN
         for button in LAST_ROW:
             button.display()
+        enter_button = Button((x, y), (KEY_SIZE*2, KEY_SIZE), 'enter')
+        enter_button.display()
 
         # display answer if failed to guess
         if len(guessed_words) == TRIES and guessed_words[TRIES-1] != guessword:
@@ -168,6 +170,12 @@ def main():
                 if delete_button.area.collidepoint(event.pos):
                     if len(input) > 0:
                         input = input[:-1]
+                if enter_button.area.collidepoint(event.pos):
+                    if ValidWords().is_valid(input):
+                        guessed_words.append(input)
+                        if input == guessword:
+                            game_status = True
+                        input = ''
 
             elif event.type == pygame.KEYDOWN:
                 # press enter to enter guess

@@ -3,7 +3,7 @@ from classes import ValidWords, Solution
 
 # constants
 WIDTH = 500
-HEIGHT = 700
+HEIGHT = 650
 BOX_SIZE = 53
 KEY_SIZE = 40
 
@@ -27,6 +27,8 @@ FIRST_LETTERS = 'QWERTYUIOP'
 SECOND_LETTERS = 'ASDFGHJKL'
 LAST_LETTERS = 'ZXCVBNM'
 
+keyboard_colors = {}
+
 # Initialize pygame and create <screen>
 pygame.init()
 pygame.display.set_caption('Wordle')
@@ -45,6 +47,17 @@ def display_text(character, color, center_value, font):
     screen.blit(letter, surface)
 
 
+def handle_keyboard_colors(input, colors):
+    for i in range(5):
+        if colors[i] == GRAY:
+            colors[i] = DARK
+        con = keyboard_colors.get(input[i], DARK)
+        if con == DARK or con == GRAY:
+            keyboard_colors[input[i]] = colors[i]
+        elif con == YELLOW and colors[i] == GREEN:
+            keyboard_colors[input[i]] = colors[i]
+
+
 class Button:
     def __init__(self, pos: tuple, measurements: tuple, sign: str) -> None:
         x, y = pos
@@ -57,13 +70,16 @@ class Button:
         self.height = height
         self.letter = sign
 
-    def display(self):
+    def display(self, color=GRAY):
         x, y = pygame.mouse.get_pos()
-        if self.area.x <= x <= self.area.x + self.width \
-           and self.area.y <= y <= self.area.y + self.height:
-            pygame.draw.rect(screen, DARK, self.area, border_radius=2)
+        if color == GRAY:
+            if self.area.x <= x <= self.area.x + self.width \
+               and self.area.y <= y <= self.area.y + self.height:
+                pygame.draw.rect(screen, DARK, self.area, border_radius=2)
+            else:
+                pygame.draw.rect(screen, GRAY, self.area, border_radius=2)
         else:
-            pygame.draw.rect(screen, GRAY, self.area, border_radius=2)
+            pygame.draw.rect(screen, color, self.area, border_radius=2)
         screen.blit(self.sign, self.surface)
 
 
@@ -115,7 +131,7 @@ def main():
             FIRST_ROW.append(button)
             x += KEY_SIZE + KEY_MARGIN
         for button in FIRST_ROW:
-            button.display()
+            button.display(keyboard_colors.get(button.letter, GRAY))
 
         # keyboard's second row
         SECOND_ROW = []
@@ -126,7 +142,7 @@ def main():
             SECOND_ROW.append(button)
             x += KEY_SIZE + KEY_MARGIN
         for button in SECOND_ROW:
-            button.display()
+            button.display(keyboard_colors.get(button.letter, GRAY))
 
         # keyboard's last row
         LAST_ROW = []
@@ -140,14 +156,14 @@ def main():
             LAST_ROW.append(button)
             x += KEY_SIZE + KEY_MARGIN
         for button in LAST_ROW:
-            button.display()
+            button.display(keyboard_colors.get(button.letter, GRAY))
         enter_button = Button((x, y), (KEY_SIZE*2, KEY_SIZE), 'enter')
         enter_button.display()
 
         # display answer if failed to guess
         if len(guessed_words) == TRIES and guessed_words[TRIES-1] != guessword:
             game_status = True
-            center_value = (250, 550)
+            center_value = (250, 620)
             display_text(guessword, DARK, center_value, 'solution')
 
         for event in pygame.event.get():
@@ -175,6 +191,8 @@ def main():
                         guessed_words.append(input)
                         if input == guessword:
                             game_status = True
+                        pom = solution.get_colors(input)
+                        handle_keyboard_colors(input, pom)
                         input = ''
 
             elif event.type == pygame.KEYDOWN:
@@ -184,6 +202,8 @@ def main():
                         guessed_words.append(input)
                         if input == guessword:
                             game_status = True
+                        pom = solution.get_colors(input)
+                        handle_keyboard_colors(input, pom)
                         input = ''
                 # handling backspace
                 elif event.key == pygame.K_BACKSPACE:

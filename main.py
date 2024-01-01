@@ -23,7 +23,7 @@ YELLOW = (255, 191, 0)
 TRIES = 6
 WORD_LEN = 5
 
-FIRST_ROW = 'QWERTYUIOP'
+FIRST_LETTERS = 'QWERTYUIOP'
 
 # Initialize pygame and create <screen>
 pygame.init()
@@ -48,7 +48,7 @@ class Button:
         x, y = pos
         width, height = measurements
         center_value = (x + width // 2, y + height // 2)
-        self.sign = SOLUTION_FONT.render(sign, False, WHITE)
+        self.sign = KEY_FONT.render(sign, False, WHITE)
         self.surface = self.sign.get_rect(center=center_value)
         self.area = pygame.Rect(x, y, 40, 40)
         self.width = width
@@ -59,9 +59,9 @@ class Button:
         x, y = pygame.mouse.get_pos()
         if self.area.x <= x <= self.area.x + self.width \
            and self.area.y <= y <= self.area.y + self.height:
-            pygame.draw.rect(screen, DARK, self.area)
+            pygame.draw.rect(screen, DARK, self.area, border_radius=2)
         else:
-            pygame.draw.rect(screen, GRAY, self.area)
+            pygame.draw.rect(screen, GRAY, self.area, border_radius=2)
         screen.blit(self.sign, self.surface)
 
 
@@ -104,9 +104,16 @@ def main():
                 x += BOX_SIZE + BOX_MARGIN
             y += BOX_SIZE + BOX_MARGIN
 
-        # keyboard
-        button = Button((230, 480), (40, 40), 'A')
-        button.display()
+        # keyboard's first row
+        FIRST_ROW = []
+        y += KEY_SIZE
+        x = WINDOW_KEY_MARGIN
+        for letter in FIRST_LETTERS:
+            button = Button((x, y), (KEY_SIZE, KEY_SIZE), letter)
+            FIRST_ROW.append(button)
+            x += KEY_SIZE + KEY_MARGIN
+        for button in FIRST_ROW:
+            button.display()
 
         # display answer if failed to guess
         if len(guessed_words) == TRIES and guessed_words[TRIES-1] != guessword:
@@ -119,8 +126,10 @@ def main():
             if event.type == pygame.QUIT:
                 showing = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if button.area.collidepoint(event.pos):
-                    input += 'A'
+                for button in FIRST_ROW:
+                    if button.area.collidepoint(event.pos):
+                        if len(input) < WORD_LEN:
+                            input += button.letter
 
             elif event.type == pygame.KEYDOWN:
                 # press enter to enter guess

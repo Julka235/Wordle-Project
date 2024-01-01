@@ -3,12 +3,16 @@ from classes import ValidWords, Solution
 
 # constants
 WIDTH = 500
-HEIGHT = 600
+HEIGHT = 700
 BOX_SIZE = 53
+KEY_SIZE = 36
 
 TOP_MARGIN = 50
 MARGIN = 100  # window margin
 BOX_MARGIN = 8  # margin between boxes
+KEY_MARGIN = 6
+WINDOW_KEY_MARGIN = 40
+
 
 WHITE = (255, 255, 255)
 GRAY = (133, 146, 158)
@@ -19,12 +23,15 @@ YELLOW = (255, 191, 0)
 TRIES = 6
 WORD_LEN = 5
 
+FIRST_ROW = 'QWERTYUIOP'
+
 # Initialize pygame and create <screen>
 pygame.init()
 pygame.display.set_caption('Wordle')
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 FONT = pygame.font.SysFont('free sans bold', BOX_SIZE)
 SOLUTION_FONT = pygame.font.SysFont('free sans bold', 35)
+KEY_FONT = pygame.font.SysFont('free sans bold', 25)
 
 
 def display_text(character, color, center_value, font):
@@ -34,6 +41,28 @@ def display_text(character, color, center_value, font):
         letter = SOLUTION_FONT.render(character, False, color)
     surface = letter.get_rect(center=center_value)
     screen.blit(letter, surface)
+
+
+class Button:
+    def __init__(self, pos: tuple, measurements: tuple, sign: str) -> None:
+        x, y = pos
+        width, height = measurements
+        center_value = (x + width // 2, y + height // 2)
+        self.sign = SOLUTION_FONT.render(sign, False, WHITE)
+        self.surface = self.sign.get_rect(center=center_value)
+        self.area = pygame.Rect(x, y, 40, 40)
+        self.width = width
+        self.height = height
+        self.letter = sign
+
+    def display(self):
+        x, y = pygame.mouse.get_pos()
+        if self.area.x <= x <= self.area.x + self.width \
+           and self.area.y <= y <= self.area.y + self.height:
+            pygame.draw.rect(screen, DARK, self.area)
+        else:
+            pygame.draw.rect(screen, GRAY, self.area)
+        screen.blit(self.sign, self.surface)
 
 
 def main():
@@ -75,18 +104,9 @@ def main():
                 x += BOX_SIZE + BOX_MARGIN
             y += BOX_SIZE + BOX_MARGIN
 
-        # button hopefully
-        x = 230
-        y = 480
-        letter = SOLUTION_FONT.render('A', False, WHITE)
-        surface = letter.get_rect(center=(250, 500))
-        button = pygame.Rect(x, y, 40, 40)
-        x, y = pygame.mouse.get_pos()
-        if button.x <= x <= button.x + 50 and button.y <= y <= button.y + 50:
-            pygame.draw.rect(screen, DARK, button)
-        else:
-            pygame.draw.rect(screen, GRAY, button)
-        screen.blit(letter, surface)
+        # keyboard
+        button = Button((230, 480), (40, 40), 'A')
+        button.display()
 
         # display answer if failed to guess
         if len(guessed_words) == TRIES and guessed_words[TRIES-1] != guessword:
@@ -99,7 +119,7 @@ def main():
             if event.type == pygame.QUIT:
                 showing = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if button.collidepoint(event.pos):
+                if button.area.collidepoint(event.pos):
                     input += 'A'
 
             elif event.type == pygame.KEYDOWN:

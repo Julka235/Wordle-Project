@@ -131,7 +131,10 @@ def main():
         # keyboard's last row
         LAST_ROW = []
         y += KEY_SIZE + KEY_MARGIN
-        x = WINDOW_KEY_MARGIN + KEY_SIZE
+        x = WINDOW_KEY_MARGIN
+        delete_button = Button((x, y), (KEY_SIZE, KEY_SIZE), '<-')
+        delete_button.display()
+        x += KEY_SIZE + KEY_MARGIN
         for letter in LAST_LETTERS:
             button = Button((x, y), (KEY_SIZE, KEY_SIZE), letter)
             LAST_ROW.append(button)
@@ -162,6 +165,9 @@ def main():
                     if button.area.collidepoint(event.pos):
                         if len(input) < WORD_LEN:
                             input += button.letter
+                if delete_button.area.collidepoint(event.pos):
+                    if len(input) > 0:
+                        input = input[:-1]
 
             elif event.type == pygame.KEYDOWN:
                 # press enter to enter guess

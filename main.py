@@ -75,6 +75,20 @@ def main():
                 x += BOX_SIZE + BOX_MARGIN
             y += BOX_SIZE + BOX_MARGIN
 
+        # button hopefully
+        x = 230
+        y = 480
+        letter = SOLUTION_FONT.render('A', False, WHITE)
+        surface = letter.get_rect(center=(250, 500))
+        button = pygame.Rect(x, y, 40, 40)
+        x, y = pygame.mouse.get_pos()
+        if button.x <= x <= button.x + 50 and button.y <= y <= button.y + 50:
+            pygame.draw.rect(screen, DARK, button)
+        else:
+            pygame.draw.rect(screen, GRAY, button)
+        screen.blit(letter, surface)
+
+        # display answer if failed to guess
         if len(guessed_words) == TRIES and guessed_words[TRIES-1] != guessword:
             game_status = True
             center_value = (250, 550)
@@ -84,6 +98,9 @@ def main():
             # close the window
             if event.type == pygame.QUIT:
                 showing = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if button.collidepoint(event.pos):
+                    input += 'A'
 
             elif event.type == pygame.KEYDOWN:
                 # press enter to enter guess
@@ -103,7 +120,9 @@ def main():
                     if letter.isalpha():
                         input += event.unicode.upper()
 
-        pygame.display.flip()
+        pygame.display.update()
+
+    pygame.quit()
 
 
 if __name__ == '__main__':

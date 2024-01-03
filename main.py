@@ -242,18 +242,23 @@ def main():
             # close the window
             if event.type == pygame.QUIT:
                 showing = False
+            # handle onscreen keyboard events
             elif event.type == pygame.MOUSEBUTTONDOWN:
+                # handle onscreen letter keys when pressed
                 KEYBOARD = FIRST_ROW + SECOND_ROW + LAST_ROW
                 for button in KEYBOARD:
                     if button.area.collidepoint(event.pos):
                         if len(input) < WORD_LEN:
                             input += button.letter
+                # handle onscreen delete button when pressed
                 if delete_button.area.collidepoint(event.pos):
                     if len(input) > 0:
                         input = input[:-1]
+                # handle onscreen enter button when pressed
                 if enter_button.area.collidepoint(event.pos):
                     temp = handle_enter(input, guessed_words, solution)
                     input, guessed_words, game_status = temp
+                # handle try again button when pressed
                 if try_again_button.area.collidepoint(event.pos):
                     input = ''
                     guessed_words = []
@@ -262,9 +267,10 @@ def main():
                     keyboard_colors.clear()
                     solution = Solution()
                     guessword = solution.guessword
+                # handle give up button when pressed
                 if give_up_button.area.collidepoint(event.pos):
                     give_up = True
-
+            # handle computer keyboard events
             elif event.type == pygame.KEYDOWN:
                 # press enter to enter guess
                 if event.key == pygame.K_RETURN:

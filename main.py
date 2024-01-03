@@ -40,7 +40,7 @@ SOLUTION_FONT = pygame.font.SysFont('free sans bold', 35)
 KEY_FONT = pygame.font.SysFont('free sans bold', 25)
 
 
-def display_text(character, color, center_value, font):
+def display_text(character, color, center_value, font) -> None:
     '''
         displays <character> on the screen
         in a box colored <color>
@@ -54,7 +54,7 @@ def display_text(character, color, center_value, font):
     screen.blit(letter, surface)
 
 
-def handle_keyboard_colors(input, colors):
+def handle_keyboard_colors(input: str, colors: tuple) -> None:
     '''
         updates <keyboard_colors>
     '''
@@ -69,7 +69,7 @@ def handle_keyboard_colors(input, colors):
             keyboard_colors[input[i]] = colors[i]
 
 
-def handle_enter(input, guessed_words, solution):
+def handle_enter(input: str, guessed_words: list, solution: Solution) -> tuple:
     '''
         handles case when enter is pressed on keyboard:
         updates <guessed_words>, <game_status and clears <input>
@@ -84,6 +84,26 @@ def handle_enter(input, guessed_words, solution):
             return ('', guessed_words, False)
     else:
         return (input, guessed_words, False)
+
+
+def get_keyboard_row(letters: str, x: int, y: int):
+    '''
+        returns row of keyboard buttons
+    '''
+    ROW = []
+    for letter in letters:
+        button = Button((x, y), (KEY_SIZE, KEY_SIZE), letter)
+        ROW.append(button)
+        x += KEY_SIZE + KEY_MARGIN
+    return ROW
+
+
+def display_keyboard_row(ROW):
+    '''
+        displayes keyboard row on the screen
+    '''
+    for button in ROW:
+        button.display(keyboard_colors.get(button.letter, GRAY))
 
 
 class Button:
@@ -166,40 +186,28 @@ def main():
             y += BOX_SIZE + BOX_MARGIN
 
         # keyboard's first row
-        FIRST_ROW = []
         y += KEY_SIZE
         x = WINDOW_KEY_MARGIN
-        for letter in FIRST_LETTERS:
-            button = Button((x, y), (KEY_SIZE, KEY_SIZE), letter)
-            FIRST_ROW.append(button)
-            x += KEY_SIZE + KEY_MARGIN
-        for button in FIRST_ROW:
-            button.display(keyboard_colors.get(button.letter, GRAY))
+        FIRST_ROW = get_keyboard_row(FIRST_LETTERS, x, y)
+        display_keyboard_row(FIRST_ROW)
 
         # keyboard's second row
-        SECOND_ROW = []
         y += KEY_SIZE + KEY_MARGIN
         x = WINDOW_KEY_MARGIN + KEY_SIZE // 2
-        for letter in SECOND_LETTERS:
-            button = Button((x, y), (KEY_SIZE, KEY_SIZE), letter)
-            SECOND_ROW.append(button)
-            x += KEY_SIZE + KEY_MARGIN
-        for button in SECOND_ROW:
-            button.display(keyboard_colors.get(button.letter, GRAY))
+        SECOND_ROW = get_keyboard_row(SECOND_LETTERS, x, y)
+        display_keyboard_row(SECOND_ROW)
 
-        # keyboard's last row
-        LAST_ROW = []
+        # delete button
         y += KEY_SIZE + KEY_MARGIN
         x = WINDOW_KEY_MARGIN
         delete_button = Button((x, y), (KEY_SIZE, KEY_SIZE), '<-')
         delete_button.display()
+        # keyboard's last row of letters
         x += KEY_SIZE + KEY_MARGIN
-        for letter in LAST_LETTERS:
-            button = Button((x, y), (KEY_SIZE, KEY_SIZE), letter)
-            LAST_ROW.append(button)
-            x += KEY_SIZE + KEY_MARGIN
-        for button in LAST_ROW:
-            button.display(keyboard_colors.get(button.letter, GRAY))
+        LAST_ROW = get_keyboard_row(LAST_LETTERS, x, y)
+        display_keyboard_row(LAST_ROW)
+        # display enter
+        x += len(LAST_ROW) * (KEY_SIZE + KEY_MARGIN)
         enter_button = Button((x, y), (KEY_SIZE*2, KEY_SIZE), 'enter')
         enter_button.display()
 

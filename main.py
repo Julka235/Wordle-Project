@@ -153,11 +153,11 @@ def main():
     guessed_words = []
     game_status = False  # not won
 
-    # solution
+    # solution - backend
     solution = Solution()
     guessword = solution.guessword
 
-    # loop
+    # displaying loop
     showing = True
     while showing:
         screen.fill(WHITE)
@@ -202,14 +202,22 @@ def main():
         x = WINDOW_KEY_MARGIN
         delete_button = Button((x, y), (KEY_SIZE, KEY_SIZE), '<-')
         delete_button.display()
+
         # keyboard's last row of letters
         x += KEY_SIZE + KEY_MARGIN
         LAST_ROW = get_keyboard_row(LAST_LETTERS, x, y)
         display_keyboard_row(LAST_ROW)
+
         # display enter
         x += len(LAST_ROW) * (KEY_SIZE + KEY_MARGIN)
-        enter_button = Button((x, y), (KEY_SIZE*2, KEY_SIZE), 'enter')
+        enter_button = Button((x, y), (2*KEY_SIZE, KEY_SIZE), 'enter')
         enter_button.display()
+
+        # display try again button
+        x = 20
+        y += KEY_SIZE + BOX_MARGIN
+        try_again_button = Button((x, y), (2*KEY_SIZE, KEY_SIZE), 'try again')
+        try_again_button.display()
 
         # display answer if failed to guess
         if len(guessed_words) == TRIES and guessed_words[TRIES-1] != guessword:
@@ -217,6 +225,7 @@ def main():
             center_value = (250, 620)
             display_text(guessword, DARK, center_value, 'solution')
 
+        # handle pygame events
         for event in pygame.event.get():
             # close the window
             if event.type == pygame.QUIT:
@@ -233,6 +242,13 @@ def main():
                 if enter_button.area.collidepoint(event.pos):
                     temp = handle_enter(input, guessed_words, solution)
                     input, guessed_words, game_status = temp
+                if try_again_button.area.collidepoint(event.pos):
+                    input = ''
+                    guessed_words = []
+                    game_status = False
+                    keyboard_colors.clear()
+                    solution = Solution()
+                    guessword = solution.guessword
 
             elif event.type == pygame.KEYDOWN:
                 # press enter to enter guess
@@ -248,9 +264,7 @@ def main():
                     letter = str(event.unicode.upper())
                     if letter.isalpha():
                         input += event.unicode.upper()
-
         pygame.display.update()
-
     pygame.quit()
 
 

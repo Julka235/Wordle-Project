@@ -215,7 +215,7 @@ def main():
 
         # display try again button
         x = 20
-        y += KEY_SIZE + BOX_MARGIN
+        y += KEY_SIZE + 5*KEY_MARGIN
         try_again_button = Button((x, y), (2*KEY_SIZE, KEY_SIZE), 'try again')
         try_again_button.display()
 
@@ -224,6 +224,11 @@ def main():
             game_status = True
             center_value = (250, 620)
             display_text(guessword, DARK, center_value, 'solution')
+
+        # congratulate if won
+        if game_status:
+            center_value = (250, 620)
+            display_text('YOU WON!', DARK, center_value, 'solution')
 
         # handle pygame events
         for event in pygame.event.get():

@@ -152,6 +152,7 @@ def main():
     input = ''
     guessed_words = []
     game_status = False  # not won
+    give_up = False
 
     # solution - backend
     solution = Solution()
@@ -219,14 +220,20 @@ def main():
         try_again_button = Button((x, y), (2*KEY_SIZE, KEY_SIZE), 'try again')
         try_again_button.display()
 
-        # display answer if failed to guess
-        if len(guessed_words) == TRIES and guessed_words[TRIES-1] != guessword:
+        # display give up button
+        x = WIDTH - 2*KEY_SIZE - 20
+        give_up_button = Button((x, y), (2*KEY_SIZE, KEY_SIZE), 'give up')
+        give_up_button.display()
+
+        # display answer if failed to guess or gave up
+        if (len(guessed_words) == TRIES and guessed_words[-1] != guessword) \
+                or give_up is True:
             game_status = True
             center_value = (250, 620)
             display_text(guessword, DARK, center_value, 'solution')
 
         # congratulate if won
-        if game_status:
+        elif game_status:
             center_value = (250, 620)
             display_text('YOU WON!', DARK, center_value, 'solution')
 
@@ -251,9 +258,12 @@ def main():
                     input = ''
                     guessed_words = []
                     game_status = False
+                    give_up = False
                     keyboard_colors.clear()
                     solution = Solution()
                     guessword = solution.guessword
+                if give_up_button.area.collidepoint(event.pos):
+                    give_up = True
 
             elif event.type == pygame.KEYDOWN:
                 # press enter to enter guess

@@ -69,6 +69,23 @@ def handle_keyboard_colors(input, colors):
             keyboard_colors[input[i]] = colors[i]
 
 
+def handle_enter(input, guessed_words, solution):
+    '''
+        handles case when enter is pressed on keyboard:
+        updates <guessed_words>, <game_status and clears <input>
+        if <input> was valid
+    '''
+    if ValidWords().is_valid(input):
+        guessed_words.append(input)
+        handle_keyboard_colors(input, solution.get_colors(input))
+        if input == solution.guessword:
+            return ('', guessed_words, True)
+        else:
+            return ('', guessed_words, False)
+    else:
+        return (input, guessed_words, False)
+
+
 class Button:
     '''
     class Button. Contains attributes:
@@ -213,24 +230,14 @@ def main():
                     if len(input) > 0:
                         input = input[:-1]
                 if enter_button.area.collidepoint(event.pos):
-                    if ValidWords().is_valid(input):
-                        guessed_words.append(input)
-                        if input == guessword:
-                            game_status = True
-                        pom = solution.get_colors(input)
-                        handle_keyboard_colors(input, pom)
-                        input = ''
+                    temp = handle_enter(input, guessed_words, solution)
+                    input, guessed_words, game_status = temp
 
             elif event.type == pygame.KEYDOWN:
                 # press enter to enter guess
                 if event.key == pygame.K_RETURN:
-                    if ValidWords().is_valid(input):
-                        guessed_words.append(input)
-                        if input == guessword:
-                            game_status = True
-                        pom = solution.get_colors(input)
-                        handle_keyboard_colors(input, pom)
-                        input = ''
+                    temp = handle_enter(input, guessed_words, solution)
+                    input, guessed_words, game_status = temp
                 # handling backspace
                 elif event.key == pygame.K_BACKSPACE:
                     if len(input) > 0:

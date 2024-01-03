@@ -222,15 +222,8 @@ def main():
             if event.type == pygame.QUIT:
                 showing = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                for button in FIRST_ROW:
-                    if button.area.collidepoint(event.pos):
-                        if len(input) < WORD_LEN:
-                            input += button.letter
-                for button in SECOND_ROW:
-                    if button.area.collidepoint(event.pos):
-                        if len(input) < WORD_LEN:
-                            input += button.letter
-                for button in LAST_ROW:
+                KEYBOARD = FIRST_ROW + SECOND_ROW + LAST_ROW
+                for button in KEYBOARD:
                     if button.area.collidepoint(event.pos):
                         if len(input) < WORD_LEN:
                             input += button.letter

@@ -190,5 +190,3 @@ def test_get_colors_two_letters_in_word_one_in_guessword(monkeypatch):
         GRAY
     ]
     assert solution.get_colors(word) == colors
-
-# git push origin

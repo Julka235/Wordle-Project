@@ -1,8 +1,10 @@
 # Wordle Game in Python and Pygame
 
-<p align="center">
-  <img src="played_game.png" alt="Wordle Game">
-</p>
+<div align="center">
+  <img src="images/game1.png" alt="Game 1" width="32%">
+  <img src="images/game2.png" alt="Game 2" width="32%">
+  <img src="images/game3.png" alt="Game 3" width="32%">
+</div>
 
 ## Project Objective
 

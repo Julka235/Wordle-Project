@@ -1,6 +1,8 @@
 # Wordle Game in Python and Pygame
 
-![Game Played Screenshot](played_game.png)
+<p align="center">
+  <img src="played_game.png" alt="Wordle Game">
+</p>
 
 ## Project Objective
 

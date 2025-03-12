@@ -1,78 +1,102 @@
 # Wordle Game in Python and Pygame
 
-## Description
+![Game Played Screenshot](played_game.png)
 
-This project implements a version of the popular Wordle game using English words. It includes a graphical interface and allows players to input letters either by clicking an on-screen keyboard or typing on their physical keyboard.
+## Project Objective
+
+The goal of this project is to implement a Wordle game based on English words, featuring a graphical interface. Players can enter letters either by clicking the on-screen keyboard or typing them using a physical keyboard.
+
+## Word Lists
+
+The game relies on two text files:
+
+- `guesswords.txt` – Used for generating secret words (sourced from [here](https://github.com/LaurentLessard/wordlesolver/blob/main/solutions_nyt.txt) and edited).
+- `valid_words.txt` – Used for checking valid input words (sourced from [here](https://gist.github.com/dracos/dd0668f281e685bad51479e5acaadb93) and edited).
+
+## Technical Information
+
+- The project is written in **Python 3.10.12**.
+
+- Requires **pygame 2.5.2**.
 
 ## Installation
 
-1. Install Python 3.10.12.
-2. Install the pygame 2.5.2 library using:
-'''
-    pip install pygame
-'''
+1. Ensure Python 3.10.12 is installed.
+
+2. Install the required library: `pip install pygame`.
 
 ## How to Play
 
-1. Run the main.py file.
-2. Enter 5-letter English words using either:
+1. Run `main.py`.
+
+2. Enter a 5-letter English word using:
+
     - Your physical keyboard.
-    - The on-screen keyboard by clicking its buttons.
-3. Press Enter to submit the word. If the word is invalid, delete it using Backspace and try again.
 
-### Game Rules
+    - The on-screen keyboard (by clicking the buttons).
 
-- You have 6 attempts to guess the correct word.
-- The game provides color-coded hints based on the standard Wordle rules:
-    - Green: The letter is correct and in the correct position.
-    - Yellow: The letter is correct but in the wrong position.
-    - Gray: The letter is not in the word.
-- If you guess the word, all letters will turn green, and "YOU WON!" will be displayed.
-- If you fail, the correct word will be shown after 6 attempts.
+3. Press _Enter_ to submit the word.
 
-### Game Options
+4. If the word is invalid, use _Backspace_ to delete it and try again.
 
-- Try Again: Start a new game.
-- Give Up: Reveal the correct word and end the current game.
+## Game Rules
 
-## Project Overview
+- Players have **6 attempts** to guess the correct word.
 
-The project consists of three main files:
+- The game provides color-coded hints following standard _Wordle_ rules:
 
-- classes.py: Contains the core logic of the game.
-    - Key Classes:
-      - Database: Handles loading and validating word lists.
-      - Guesswords: Manages the list of possible answers.
-      - ValidWords: Checks if a word is valid.
-      - Solution: Implements the logic for checking guesses and providing feedback.
-- main.py: Implements the graphical interface and gameplay interactions.
-- test_classes.py: Contains test cases to validate the functionality of classes.py.
+    - **Green** – Letter is correct and in the right position.
 
-### Technical Details
+    - **Yellow** – Letter is in the word but in the wrong position.
 
-- Word lists:
-  - guesswords.txt: For generating random solutions.
-  - valid_words.txt: For validating user input.
-- Both lists are pre-processed for compatibility and efficiency.
-- Dependencies:
-  - Python 3.10.12.
-  - Pygame 2.5.2.
+    - **Gray** – Letter is not in the word.
+
+- **Winning**: If all letters turn green, caption _**YOU WON!**_ is displayed.
+
+- **Losing**: After 6 failed attempts, the correct word is revealed.
+
+# Game Options
+
+- **Try Again** – Starts a new game.
+
+- **Give Up** – Reveals the correct word and ends the current game.
+
+## Code behind the game
+
+### Class Structure
+
+- **Database** – Loads word lists from text files, validates them, ensures proper formatting, and sorts them for efficient searching.
+
+- **Guesswords** – Inherits from Database, loads possible solution words (guesswords.txt), and selects a random secret word.
+
+- **ValidWords** – Inherits from Database, loads valid words (valid_words.txt), and allows quick verification of valid inputs.
+
+- **Solution** – Handles the logic of a single Wordle game, checking guessed words and determining the appropriate color feedback.
+
+- **Button** – Creates and displays interactive buttons on the screen.
 
 ### Testing
 
-Key test cases include:
+#### Binary Search Tests (ValidWords Class)
 
-- Validating word searches in ValidWords:
-  - Words not in the list.
-  - First/last words in the list.
-  -  Out-of-bounds cases.
-- Testing color feedback in Solution:
-  - Duplicate letters in guesses and the solution.
-  - Matching letters in different positions.
-  - Exact match of the guess with the solution.
+- Checking words that are not in the list.
 
-## Objective
+- Checking words that are first or last in the list.
 
-The goal is to recreate the Wordle experience with an intuitive graphical interface and multiple input methods, making it easy and enjoyable to play.
+- Out-of-bounds cases.
+
+#### Color Feedback Tests (Solution Class)
+
+- Handling duplicate letters when only one is in the secret word.
+
+- Handling cases in duplicates where second instance of a letter is correct.
+
+- Verifying that a correct word turns all letters green.
+
+### Reflection
+
+Initially, I misunderstood Wordle’s color rules. For example, if the secret word is "EVADE" and the player enters "ABACK", my initial logic incorrectly marked the first 'A' as yellow instead of the second 'A' as green.
+
+Despite this, I successfully implemented all planned features. Additionally, I introduced two new buttons: "Give Up" to surrender and "Try Again" to start a new game.
 
 Enjoy solving puzzles and have fun with Wordle! 😊
